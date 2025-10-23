@@ -5,6 +5,7 @@ A beautiful and modern admin panel built with Laravel backend and Next.js fronte
 ![Admin Panel](https://img.shields.io/badge/Stack-Laravel%20%2B%20Next.js-blue)
 ![Docker](https://img.shields.io/badge/Docker-Ready-green)
 ![CI/CD](https://img.shields.io/badge/CI%2FCD-GitHub%20Actions-orange)
+[![Deploy to DO](https://www.deploytodo.com/do-btn-blue.svg)](https://cloud.digitalocean.com/apps/new?repo=https://github.com/somkheartk/admin-panel-laravel-tailwincss-nextjs-mui/tree/main)
 
 ## 🚀 Features
 
@@ -19,7 +20,22 @@ A beautiful and modern admin panel built with Laravel backend and Next.js fronte
 
 ## ⚡ Quick Start
 
-Want to get started immediately? Check out our [Quick Start Guide](QUICKSTART.md)!
+### 🌊 Deploy to Digital Ocean (Recommended)
+
+Deploy in minutes with Digital Ocean App Platform:
+
+1. Click the "Deploy to DigitalOcean" button above
+2. Select your GitHub repository: `somkheartk/admin-panel-laravel-tailwincss-nextjs-mui`
+3. Branch: `main`
+4. Digital Ocean will automatically detect components using the `.do/app.yaml` spec
+5. Add your `APP_KEY` secret (generate with: `php artisan key:generate --show`)
+6. Click "Deploy"
+
+For detailed instructions, see [DEPLOYMENT.md](DEPLOYMENT.md).
+
+### 🐳 Docker Quick Start
+
+Want to run locally? Check out our [Quick Start Guide](QUICKSTART.md)!
 
 **TL;DR:**
 ```bash
@@ -29,8 +45,6 @@ cp .env.docker.example .env
 # Add APP_KEY to .env
 ./deploy.sh up && ./deploy.sh migrate
 ```
-
-For Digital Ocean deployment, see [DEPLOYMENT.md](DEPLOYMENT.md).
 
 ## 📋 Prerequisites
 

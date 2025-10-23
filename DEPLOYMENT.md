@@ -5,6 +5,7 @@ This guide explains how to deploy the Admin Panel application on Digital Ocean o
 ## 📋 Table of Contents
 
 - [Digital Ocean App Platform](#digital-ocean-app-platform)
+- [Component Detection](#component-detection)
 - [Docker Compose Deployment](#docker-compose-deployment)
 - [Environment Configuration](#environment-configuration)
 - [Post-Deployment Steps](#post-deployment-steps)
@@ -19,9 +20,38 @@ This guide explains how to deploy the Admin Panel application on Digital Ocean o
 2. GitHub repository access
 3. Required secrets configured
 
+### 🎯 Component Detection
+
+This repository is configured to be automatically detected by Digital Ocean App Platform:
+
+**Detection Files:**
+- ✅ Root-level `package.json` - For Node.js/Next.js detection
+- ✅ Root-level `composer.json` - For PHP/Laravel detection
+- ✅ `.do/app.yaml` - Complete app specification
+- ✅ Backend Dockerfile at `backend/Dockerfile`
+- ✅ Frontend Dockerfile at `frontend/Dockerfile`
+
+When you connect this repository to Digital Ocean:
+1. The platform will detect both package.json and composer.json
+2. It will automatically use the `.do/app.yaml` specification
+3. Components will be configured with proper source directories
+4. All services (backend, frontend, database, workers) will be set up automatically
+
 ### Deployment Steps
 
-#### Option 1: Using App Spec (Recommended)
+#### Option 1: One-Click Deploy (Fastest)
+
+Click the deploy button in the main README or use this link:
+
+[![Deploy to DO](https://www.deploytodo.com/do-btn-blue.svg)](https://cloud.digitalocean.com/apps/new?repo=https://github.com/somkheartk/admin-panel-laravel-tailwincss-nextjs-mui/tree/main)
+
+Digital Ocean will:
+- Automatically detect the repository components
+- Import the `.do/app.yaml` specification
+- Configure all services with correct settings
+- You only need to add the `APP_KEY` secret
+
+#### Option 2: Using App Spec (Recommended)
 
 1. **Login to Digital Ocean**
    - Navigate to [Digital Ocean App Platform](https://cloud.digitalocean.com/apps)
@@ -343,6 +373,15 @@ docker-compose up -d --scale backend=3 --scale frontend=2
 ## 🐛 Troubleshooting
 
 ### Common Issues
+
+**0. No Components Detected (Digital Ocean)**
+- ✅ **FIXED**: Root-level `package.json` and `composer.json` added for auto-detection
+- Verify you're connected to the correct repository
+- Ensure the `main` branch is selected
+- Check that `.do/app.yaml` exists in the repository
+- Try manually importing the app spec using "Edit App Spec" option
+- Verify GitHub permissions allow Digital Ocean to read the repository
+- If auto-detection still fails, use Option 2 (Manual Configuration) from deployment steps
 
 **1. Database Connection Failed**
 - Check database credentials

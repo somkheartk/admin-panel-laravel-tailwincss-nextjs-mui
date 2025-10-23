@@ -16,9 +16,9 @@ This update transforms the repository into a **production-ready application** th
 
 ### Configuration Files
 
-1. **`.do/app.yaml`** (146 lines)
+1. **`.do/app.yaml`** (77 lines)
    - Digital Ocean App Platform specification
-   - Defines services, databases, workers, and jobs
+   - Defines services (backend, frontend) and database
    - Auto-deploy configuration
    - Environment variable management
 
@@ -325,9 +325,10 @@ GitHub Actions workflow:
 Digital Ocean auto-deploy:
 1. Detects GitHub push
 2. Builds new images
-3. Runs pre-deploy job (migrations)
+3. Deploys backend and frontend services
 4. Deploys with zero downtime
 5. Health checks verify deployment
+6. Database migrations should be run manually after deployment
 
 ## 🎯 Problem Solved
 

@@ -4,7 +4,7 @@ This directory contains the configuration for deploying to Digital Ocean App Pla
 
 ## Files
 
-- **app.yaml**: The complete app specification that defines all components (backend, frontend, database, workers, and jobs)
+- **app.yaml**: The complete app specification that defines all components (backend, frontend, and database)
 - **deploy.template.yaml**: Template specification for one-click deployment from Git template (without hardcoded repository references)
 
 ## How to Deploy
@@ -65,15 +65,9 @@ The app.yaml defines:
 3. **Database** (MySQL 8)
    - Managed MySQL database
    - Automatic backups
-   - Connects to backend and worker
+   - Connects to backend service
 
-4. **Queue Worker** (Optional)
-   - Processes Laravel queue jobs
-   - Runs `php artisan queue:work`
-
-5. **Pre-Deploy Migration Job**
-   - Runs database migrations before deployment
-   - Executes `php artisan migrate --force`
+**Note:** This configuration uses a simplified 2-component architecture (backend + frontend). Workers and pre-deploy jobs have been removed for simplicity. Database migrations should be run manually after deployment.
 
 ## Environment Variables
 
@@ -96,7 +90,10 @@ These are automatically set by Digital Ocean:
 
 1. Verify all services are running
 2. Check the "Runtime Logs" for each service
-3. Database migrations run automatically via pre-deploy job
+3. **Run database migrations manually:**
+   - Access the backend console in Digital Ocean dashboard
+   - Navigate to the Console tab for the backend service
+   - Run: `php artisan migrate --force`
 4. Access your application via the provided URL
 
 ## Troubleshooting

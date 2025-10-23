@@ -74,7 +74,8 @@ When connecting the repository to Digital Ocean App Platform:
    - Automatically imports `.do/app.yaml` configuration
    - Sets up backend service with `source_dir: backend`
    - Sets up frontend service with `source_dir: frontend`
-   - Configures database, workers, and pre-deploy jobs
+   - Configures managed MySQL database
+   - Uses simplified 2-component architecture (backend + frontend)
 
 3. **Build Phase**:
    - Backend builds from `backend/Dockerfile`

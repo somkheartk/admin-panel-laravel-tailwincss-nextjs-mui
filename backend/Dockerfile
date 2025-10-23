@@ -14,6 +14,7 @@ RUN apt-get update && apt-get install -y \
     unzip \
     libzip-dev \
     nginx \
+    ca-certificates \
     && docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd zip \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
@@ -21,18 +22,12 @@ RUN apt-get update && apt-get install -y \
 # Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-# Copy composer files first for better caching
-COPY composer.json composer.lock ./
-
-# Install PHP dependencies
-RUN composer install --no-dev --no-scripts --no-autoloader --prefer-dist
-
 # Copy application files
 COPY . .
 
-# Complete composer installation
-RUN composer install --optimize-autoloader --no-dev \
-    && composer dump-autoload --optimize
+# Install PHP dependencies with better error handling
+RUN composer install --optimize-autoloader --no-dev --prefer-dist --no-interaction || \
+    composer install --optimize-autoloader --no-dev --no-interaction
 
 # Create storage directories and set permissions
 RUN mkdir -p storage/framework/sessions \
@@ -48,10 +43,16 @@ COPY nginx.conf /etc/nginx/sites-available/default
 
 # Create startup script
 RUN echo '#!/bin/bash\n\
-php artisan config:cache\n\
-php artisan route:cache\n\
-php artisan view:cache\n\
+set -e\n\
+echo "Starting application..."\n\
+if [ -f /var/www/html/.env ]; then\n\
+    php artisan config:cache || echo "Config cache skipped"\n\
+    php artisan route:cache || echo "Route cache skipped"\n\
+    php artisan view:cache || echo "View cache skipped"\n\
+fi\n\
+echo "Starting nginx..."\n\
 service nginx start\n\
+echo "Starting PHP-FPM..."\n\
 php-fpm' > /start.sh && chmod +x /start.sh
 
 # Expose port 80 for nginx

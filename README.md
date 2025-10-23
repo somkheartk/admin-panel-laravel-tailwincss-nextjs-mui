@@ -12,8 +12,25 @@ A beautiful and modern admin panel built with Laravel backend and Next.js fronte
 - **Beautiful UI**: Material-UI components with Tailwind CSS styling
 - **Responsive Design**: Mobile-first approach with responsive sidebar
 - **Docker Support**: Full Docker containerization for easy deployment
+- **Digital Ocean Ready**: One-click deployment to Digital Ocean App Platform
 - **CI/CD Pipeline**: Automated Docker image builds and pushes to Docker Hub
 - **API Ready**: RESTful API endpoints with Laravel backend
+- **Production Ready**: Optimized for production with health checks and monitoring
+
+## ⚡ Quick Start
+
+Want to get started immediately? Check out our [Quick Start Guide](QUICKSTART.md)!
+
+**TL;DR:**
+```bash
+git clone https://github.com/somkheartk/admin-panel-laravel-tailwincss-nextjs-mui.git
+cd admin-panel-laravel-tailwincss-nextjs-mui
+cp .env.docker.example .env
+# Add APP_KEY to .env
+./deploy.sh up && ./deploy.sh migrate
+```
+
+For Digital Ocean deployment, see [DEPLOYMENT.md](DEPLOYMENT.md).
 
 ## 📋 Prerequisites
 

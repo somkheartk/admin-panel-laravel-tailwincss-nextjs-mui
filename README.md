@@ -12,8 +12,25 @@ A beautiful and modern admin panel built with Laravel backend and Next.js fronte
 - **Beautiful UI**: Material-UI components with Tailwind CSS styling
 - **Responsive Design**: Mobile-first approach with responsive sidebar
 - **Docker Support**: Full Docker containerization for easy deployment
+- **Digital Ocean Ready**: One-click deployment to Digital Ocean App Platform
 - **CI/CD Pipeline**: Automated Docker image builds and pushes to Docker Hub
 - **API Ready**: RESTful API endpoints with Laravel backend
+- **Production Ready**: Optimized for production with health checks and monitoring
+
+## ⚡ Quick Start
+
+Want to get started immediately? Check out our [Quick Start Guide](QUICKSTART.md)!
+
+**TL;DR:**
+```bash
+git clone https://github.com/somkheartk/admin-panel-laravel-tailwincss-nextjs-mui.git
+cd admin-panel-laravel-tailwincss-nextjs-mui
+cp .env.docker.example .env
+# Add APP_KEY to .env
+./deploy.sh up && ./deploy.sh migrate
+```
+
+For Digital Ocean deployment, see [DEPLOYMENT.md](DEPLOYMENT.md).
 
 ## 📋 Prerequisites
 
@@ -52,15 +69,47 @@ git clone https://github.com/somkheartk/admin-panel-laravel-tailwincss-nextjs-mu
 cd admin-panel-laravel-tailwincss-nextjs-mui
 ```
 
-2. Start all services:
+2. Configure environment:
+```bash
+cp .env.docker.example .env
+# Edit .env and add your APP_KEY (generate with: php artisan key:generate --show)
+```
+
+3. Start all services:
 ```bash
 docker-compose up -d
 ```
 
-3. Access the applications:
+4. Run database migrations:
+```bash
+docker-compose exec backend php artisan migrate --force
+```
+
+5. Access the applications:
 - Frontend: http://localhost:3000
 - Backend API: http://localhost:8000
 - Database: localhost:3306
+
+### Digital Ocean Deployment
+
+Deploy the entire stack on Digital Ocean App Platform with a single click!
+
+1. **Prerequisites:**
+   - Digital Ocean account
+   - GitHub repository connected
+
+2. **Deploy Steps:**
+   - Use the app spec at `.do/app.yaml`
+   - Or follow detailed instructions in [DEPLOYMENT.md](DEPLOYMENT.md)
+
+3. **Features:**
+   - ✅ Automatic deployments from `main` branch
+   - ✅ Managed MySQL database
+   - ✅ Auto-scaling capabilities
+   - ✅ Built-in SSL/TLS certificates
+   - ✅ Health checks and monitoring
+
+See [DEPLOYMENT.md](DEPLOYMENT.md) for complete deployment guide.
 
 ### Individual Docker Builds
 
@@ -68,7 +117,7 @@ Build and run Backend:
 ```bash
 cd backend
 docker build -t admin-panel-backend .
-docker run -p 8000:9000 admin-panel-backend
+docker run -p 8000:80 admin-panel-backend
 ```
 
 Build and run Frontend:

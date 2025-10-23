@@ -9,6 +9,11 @@ Thumbs.db
 *.swo
 *~
 
+# Environment files
+.env
+.env.local
+.env.*.local
+
 # Backend - Laravel
 backend/vendor/
 backend/node_modules/

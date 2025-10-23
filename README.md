@@ -1,20 +1,21 @@
-# Admin Panel - Laravel + Next.js + Tailwind CSS + MUI
+# Admin Panel - NestJS + Next.js + MongoDB + Tailwind CSS + MUI
 
-A beautiful and modern admin panel built with Laravel backend and Next.js frontend, featuring Material-UI components and Tailwind CSS styling.
+A beautiful and modern admin panel built with NestJS backend, MongoDB database, and Next.js frontend, featuring Material-UI components and Tailwind CSS styling.
 
-![Admin Panel](https://img.shields.io/badge/Stack-Laravel%20%2B%20Next.js-blue)
+![Admin Panel](https://img.shields.io/badge/Stack-NestJS%20%2B%20MongoDB%20%2B%20Next.js-blue)
 ![Docker](https://img.shields.io/badge/Docker-Ready-green)
 ![CI/CD](https://img.shields.io/badge/CI%2FCD-GitHub%20Actions-orange)
 
 ## 🚀 Features
 
-- **Modern Tech Stack**: Laravel 12 + Next.js 16 + TypeScript
+- **Modern Tech Stack**: NestJS 11 + MongoDB 8 + Next.js 16 + TypeScript
 - **Beautiful UI**: Material-UI components with Tailwind CSS styling
 - **Responsive Design**: Mobile-first approach with responsive sidebar
 - **Docker Support**: Full Docker containerization for easy deployment
 - **CI/CD Pipeline**: Automated Docker image builds and pushes to Docker Hub
-- **API Ready**: RESTful API endpoints with Laravel backend
+- **API Ready**: RESTful API endpoints with NestJS backend
 - **Production Ready**: Optimized for production with health checks and monitoring
+- **NoSQL Database**: MongoDB with Mongoose ODM for flexible data modeling
 
 ## 📋 Use as Template
 
@@ -39,26 +40,25 @@ Want to run locally? Check out our [Quick Start Guide](QUICKSTART.md)!
 git clone https://github.com/somkheartk/admin-panel-laravel-tailwincss-nextjs-mui.git
 cd admin-panel-laravel-tailwincss-nextjs-mui
 cp .env.docker.example .env
-# APP_KEY will be auto-generated if not set
-./deploy.sh up
-# Migrations run automatically on backend startup!
+docker-compose up -d
+# Backend starts automatically and connects to MongoDB!
 ```
 
 ## 📋 Prerequisites
 
 - Docker and Docker Compose
 - Node.js 20+ (for local development)
-- PHP 8.3+ (for local development)
-- Composer (for local development)
+- MongoDB 8+ (for local development)
 
 ## 🏗️ Project Structure
 
 ```
 .
-├── backend/              # Laravel backend API
-│   ├── app/
-│   ├── routes/
-│   ├── database/
+├── backend/              # NestJS backend API
+│   ├── src/
+│   │   ├── dashboard/   # Dashboard module
+│   │   ├── health/      # Health check module
+│   │   └── main.ts
 │   └── Dockerfile
 ├── frontend/             # Next.js frontend
 │   ├── app/
@@ -68,7 +68,7 @@ cp .env.docker.example .env
 │   └── workflows/
 │       └── docker-publish.yml
 ├── docker-compose.yml
-└── nginx.conf
+└── README.md
 ```
 
 ## 🐳 Docker Deployment
@@ -93,15 +93,14 @@ cp .env.docker.example .env
 docker compose up -d
 ```
 
-4. Access the applications (migrations run automatically):
+4. Access the applications:
 - Frontend: http://localhost:3000
-- Backend API: http://localhost:8000
-- Database: localhost:3306
+- Backend API: http://localhost:3001
+- MongoDB: localhost:27017
 
 **Note:** The backend container automatically:
-- Generates APP_KEY if not provided
-- Runs database migrations on startup
-- No manual migration step needed!
+- Connects to MongoDB on startup
+- No manual migration step needed for NoSQL!
 
 See [DEPLOYMENT.md](DEPLOYMENT.md) for complete deployment guide.
 
@@ -111,7 +110,9 @@ Build and run Backend:
 ```bash
 cd backend
 docker build -t admin-panel-backend .
-docker run -p 8000:80 admin-panel-backend
+docker run -p 3001:3001 \
+  -e MONGODB_URI=mongodb://admin:admin_password@db:27017/admin_panel?authSource=admin \
+  admin-panel-backend
 ```
 
 Build and run Frontend:
@@ -123,7 +124,7 @@ docker run -p 3000:3000 admin-panel-frontend
 
 ## 💻 Local Development
 
-### Backend Setup (Laravel)
+### Backend Setup (NestJS)
 
 1. Navigate to backend directory:
 ```bash
@@ -132,26 +133,25 @@ cd backend
 
 2. Install dependencies:
 ```bash
-composer install
+npm install
 ```
 
 3. Set up environment:
 ```bash
 cp .env.example .env
-php artisan key:generate
 ```
 
-4. Configure database in `.env` file
+4. Configure MongoDB in `.env` file:
+```env
+MONGODB_URI=mongodb://localhost:27017/admin_panel
+```
 
-5. Run migrations:
+5. Start development server:
 ```bash
-php artisan migrate
+npm run start:dev
 ```
 
-6. Start development server:
-```bash
-php artisan serve
-```
+The backend API will be available at http://localhost:3001
 
 ### Frontend Setup (Next.js)
 
@@ -167,7 +167,7 @@ npm install
 
 3. Create `.env.local` file:
 ```env
-NEXT_PUBLIC_API_URL=http://localhost:8000/api
+NEXT_PUBLIC_API_URL=http://localhost:3001/api
 ```
 
 4. Start development server:
@@ -195,9 +195,10 @@ Add these secrets to your GitHub repository:
 ## 🎨 Tech Stack
 
 ### Backend
-- **Framework**: Laravel 12
-- **Database**: MySQL 8.0
-- **Server**: PHP-FPM + Nginx
+- **Framework**: NestJS 11
+- **Database**: MongoDB 8.0
+- **ODM**: Mongoose
+- **Language**: TypeScript
 
 ### Frontend
 - **Framework**: Next.js 16 (App Router)
@@ -236,24 +237,20 @@ Add these secrets to your GitHub repository:
 
 ### Backend (.env)
 ```env
-APP_NAME=AdminPanel
-APP_ENV=production
-APP_KEY=base64:...
-DB_CONNECTION=mysql
-DB_HOST=db
-DB_PORT=3306
-DB_DATABASE=admin_panel
-DB_USERNAME=admin_user
-DB_PASSWORD=admin_password
+PORT=3001
+NODE_ENV=production
+MONGODB_URI=mongodb://admin:admin_password@db:27017/admin_panel?authSource=admin
+FRONTEND_URL=http://localhost:3000
 ```
 
 ### Frontend (.env.local)
 ```env
-NEXT_PUBLIC_API_URL=http://localhost:8000/api
+NEXT_PUBLIC_API_URL=http://localhost:3001/api
 ```
 
 ## 📝 API Endpoints
 
+- `GET /api/health` - Health check endpoint
 - `GET /api/dashboard/stats` - Get dashboard statistics
 - `GET /api/dashboard/orders` - Get recent orders
 
@@ -275,7 +272,8 @@ This project is open source and available under the [MIT License](LICENSE).
 
 ## 🙏 Acknowledgments
 
-- Laravel Framework
+- NestJS Framework
+- MongoDB
 - Next.js Team
 - Material-UI
 - Tailwind CSS
@@ -283,4 +281,4 @@ This project is open source and available under the [MIT License](LICENSE).
 
 ---
 
-Made with ❤️ using Laravel, Next.js, Tailwind CSS, and Material-UI
+Made with ❤️ using NestJS, MongoDB, Next.js, Tailwind CSS, and Material-UI

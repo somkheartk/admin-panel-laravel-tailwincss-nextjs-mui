@@ -53,9 +53,10 @@ fi
 
 # Check if APP_KEY is set
 if ! grep -q "APP_KEY=base64:" .env; then
-    print_error "APP_KEY is not set in .env file!"
-    print_info "Generate APP_KEY with: docker run --rm -v \$(pwd)/backend:/app php:8.3-cli php /app/artisan key:generate --show"
-    exit 1
+    print_warn "APP_KEY is not set in .env file!"
+    print_info "The backend will auto-generate an APP_KEY on first startup"
+    print_info "For production, it's recommended to generate and set APP_KEY manually:"
+    print_info "  docker run --rm -v \$(pwd)/backend:/app php:8.3-cli php /app/artisan key:generate --show"
 fi
 
 # Parse command

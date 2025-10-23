@@ -4,8 +4,8 @@ This directory contains the configuration for deploying to Digital Ocean App Pla
 
 ## Files
 
-- **app.yaml**: The complete app specification that defines all components (backend, frontend, database, workers, and jobs)
-- **deploy.template.yaml**: Template specification for one-click deployment from Git template (without hardcoded repository references)
+- **app.yaml**: The complete app specification with 2 components (backend and frontend) plus database
+- **deploy.template.yaml**: Template specification for one-click deployment from Git template
 
 ## How to Deploy
 
@@ -25,8 +25,13 @@ Click the "Deploy to DigitalOcean" button in the main README.md:
 6. Copy the contents of `app.yaml` from this directory
 7. Paste into the spec editor
 8. Click "Next"
-9. Configure secrets (especially `APP_KEY`)
+9. Optionally configure secrets (APP_KEY will be auto-generated if not provided)
 10. Click "Create Resources"
+
+**The deployment is fully automated:**
+- APP_KEY is auto-generated if not provided
+- Migrations run automatically on backend startup
+- Application is ready to use immediately after deployment!
 
 ### Option 3: Manual Component Configuration
 
@@ -50,12 +55,14 @@ If Digital Ocean auto-detects components, you can configure them manually:
 
 ## Components Defined
 
-The app.yaml defines:
+The app.yaml defines a simplified 2-component architecture:
 
 1. **Backend Service** (Laravel API)
    - Dockerfile-based build from `backend/Dockerfile`
    - Connects to MySQL database
    - Serves API endpoints at `/api` route
+   - Auto-generates APP_KEY if not provided
+   - Runs database migrations automatically on startup
 
 2. **Frontend Service** (Next.js)
    - Dockerfile-based build from `frontend/Dockerfile`
@@ -65,25 +72,16 @@ The app.yaml defines:
 3. **Database** (MySQL 8)
    - Managed MySQL database
    - Automatic backups
-   - Connects to backend and worker
-
-4. **Queue Worker** (Optional)
-   - Processes Laravel queue jobs
-   - Runs `php artisan queue:work`
-
-5. **Pre-Deploy Migration Job**
-   - Runs database migrations before deployment
-   - Executes `php artisan migrate --force`
+   - Connects to backend service
 
 ## Environment Variables
 
-### Required Secrets
+### Optional Secrets
 
-You must configure these secrets in Digital Ocean:
-
-- `APP_KEY`: Laravel application encryption key
+- `APP_KEY`: Laravel application encryption key (OPTIONAL - auto-generated if not provided)
   - Generate with: `php artisan key:generate --show`
   - Format: `base64:...`
+  - Recommendation: For production, set this as a secret to ensure consistency across deployments
 
 ### Automatically Configured
 
@@ -95,9 +93,11 @@ These are automatically set by Digital Ocean:
 ## Post-Deployment
 
 1. Verify all services are running
-2. Check the "Runtime Logs" for each service
-3. Database migrations run automatically via pre-deploy job
-4. Access your application via the provided URL
+2. Check the "Runtime Logs" for the backend service to confirm:
+   - APP_KEY was generated or loaded successfully
+   - Database migrations completed successfully
+3. Access your application via the provided URL
+4. No manual intervention needed - everything is automated!
 
 ## Troubleshooting
 

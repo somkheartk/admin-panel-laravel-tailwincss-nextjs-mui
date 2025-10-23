@@ -1,153 +1,12 @@
 # Deployment Guide
 
-This guide explains how to deploy the Admin Panel application on Digital Ocean or any other Docker-compatible platform.
+This guide explains how to deploy the Admin Panel application using Docker Compose for development or production environments.
 
 ## 📋 Table of Contents
 
-- [Digital Ocean App Platform](#digital-ocean-app-platform)
-- [Component Detection](#component-detection)
 - [Docker Compose Deployment](#docker-compose-deployment)
 - [Environment Configuration](#environment-configuration)
 - [Post-Deployment Steps](#post-deployment-steps)
-
----
-
-## 🌊 Digital Ocean App Platform
-
-### Prerequisites
-
-1. A Digital Ocean account
-2. GitHub repository access
-3. Required secrets configured
-
-### 🎯 Component Detection
-
-This repository is configured to be automatically detected by Digital Ocean App Platform:
-
-**Deployment Components:**
-- 🗄️ **Database**: MySQL 8.0 managed database
-- 🔧 **Backend**: Laravel API service (PHP 8.3) - includes automatic migrations on startup
-- 🎨 **Frontend**: Next.js web application (Node.js)
-
-**Detection Files:**
-- ✅ Root-level `package.json` - For Node.js/Next.js detection
-- ✅ Root-level `composer.json` - For PHP/Laravel detection
-- ✅ `.do/app.yaml` - Complete app specification
-- ✅ Backend Dockerfile at `backend/Dockerfile`
-- ✅ Frontend Dockerfile at `frontend/Dockerfile`
-
-When you connect this repository to Digital Ocean:
-1. The platform will detect both package.json and composer.json
-2. It will automatically use the `.do/app.yaml` specification
-3. Components will be configured with proper source directories
-4. Two main services (backend and frontend) plus the database will be set up automatically
-5. Backend automatically generates APP_KEY if not provided and runs migrations on startup
-
-**Note:** This deployment uses a simplified 2-component architecture (backend + frontend). The backend container automatically:
-- Generates APP_KEY if not provided (though it's recommended to set it as a secret)
-- Runs database migrations on container startup
-- No separate worker or pre-deploy jobs needed
-
-### Deployment Steps
-
-#### Option 1: One-Click Deploy (Fastest)
-
-Click the deploy button in the main README or use this link:
-
-[![Deploy to DO](https://www.deploytodo.com/do-btn-blue.svg)](https://cloud.digitalocean.com/apps/new?repo=https://github.com/somkheartk/admin-panel-laravel-tailwincss-nextjs-mui/tree/main)
-
-Digital Ocean will:
-- Automatically detect the repository components
-- Import the `.do/app.yaml` specification
-- Configure backend and frontend services with correct settings
-- Set up the MySQL database
-- You only need to add the `APP_KEY` secret
-
-#### Option 2: Using App Spec (Recommended)
-
-1. **Login to Digital Ocean**
-   - Navigate to [Digital Ocean App Platform](https://cloud.digitalocean.com/apps)
-
-2. **Create New App**
-   - Click "Create App"
-   - Select "GitHub" as source
-   - Authorize Digital Ocean to access your repository
-   - Select: `somkheartk/admin-panel-laravel-tailwincss-nextjs-mui`
-   - Branch: `main`
-
-3. **Import App Spec**
-   - Select "Edit App Spec"
-   - Copy the contents of `.do/app.yaml` (or `.do/deploy.template.yaml` if using as a template)
-   - If using the template, replace `somkheartk/admin-panel-laravel-tailwincss-nextjs-mui` with your repository path
-   - Paste into the spec editor
-   - Click "Next"
-
-4. **Configure Environment Variables**
-   - Optionally add `APP_KEY` secret (if not provided, one will be auto-generated on first deployment):
-     ```bash
-     # Generate locally:
-     php artisan key:generate --show
-     ```
-   - Copy the generated key (e.g., `base64:...`)
-   - Add as a secret in Digital Ocean
-   - **Note**: While APP_KEY will be auto-generated if not provided, it's recommended to set it as a secret for production use to ensure consistency across deployments
-
-5. **Review & Deploy**
-   - Review the configuration
-   - Click "Create Resources"
-   - Wait for deployment to complete (5-10 minutes)
-
-#### Option 2: Manual Configuration
-
-1. **Create Database**
-   - Name: `admin-panel-db`
-   - Engine: MySQL 8
-   - Plan: Choose based on your needs
-
-2. **Add Backend Service**
-   - Name: `backend`
-   - Source: GitHub repository
-   - Source Directory: `backend`
-   - Dockerfile: `backend/Dockerfile`
-   - HTTP Port: 80
-   - Route: `/api`
-   - Environment Variables:
-     ```
-     APP_NAME=AdminPanel
-     APP_ENV=production
-     APP_DEBUG=false
-     APP_KEY=[SECRET]
-     DB_CONNECTION=mysql
-     DB_HOST=${db.HOSTNAME}
-     DB_PORT=${db.PORT}
-     DB_DATABASE=${db.DATABASE}
-     DB_USERNAME=${db.USERNAME}
-     DB_PASSWORD=${db.PASSWORD}
-     LOG_CHANNEL=stderr
-     SESSION_DRIVER=database
-     CACHE_STORE=database
-     ```
-
-3. **Add Frontend Service**
-   - Name: `frontend`
-   - Source: GitHub repository
-   - Source Directory: `frontend`
-   - Dockerfile: `frontend/Dockerfile`
-   - HTTP Port: 3000
-   - Route: `/`
-   - Environment Variables:
-     ```
-     NODE_ENV=production
-     NEXT_PUBLIC_API_URL=${backend.PUBLIC_URL}/api
-     ```
-
-**Note**: With the simplified 2-component setup, migrations run automatically when the backend container starts. No separate migration job needed!
-
-### Auto-Deploy Configuration
-
-The app will automatically redeploy when:
-- Changes are pushed to the `main` branch
-- Manual trigger from Digital Ocean dashboard
 
 ---
 
@@ -226,8 +85,7 @@ docker-compose exec backend php artisan migrate --force
    ```
 
 3. Configure SSL/TLS:
-   - Add reverse proxy (Nginx/Traefik) with SSL
-   - Or use Digital Ocean's built-in SSL
+   - Add reverse proxy (Nginx/Traefik) with SSL for secure connections
 
 ---
 
@@ -279,19 +137,12 @@ curl https://your-frontend-url
 
 ### 2. Run Database Migrations
 
-**Digital Ocean:**
-- Migrations run automatically when the backend container starts
-- No manual intervention needed!
-- Check backend service logs to verify migrations completed successfully:
-  - Navigate to your app in Digital Ocean dashboard
-  - Select the backend service
-  - View Runtime Logs
-  - Look for "Running database migrations..." message
-
 **Docker Compose:**
 ```bash
 docker-compose exec backend php artisan migrate --force
 ```
+
+Note: Migrations run automatically when the backend container starts, so manual execution is only needed if you want to run them again.
 
 ### 3. Create Admin User (Optional)
 
@@ -310,10 +161,6 @@ User::create([
 
 ### 4. Monitor Logs
 
-**Digital Ocean:**
-- View logs in the Digital Ocean dashboard
-- Runtime Logs → Select service → View logs
-
 **Docker Compose:**
 ```bash
 # All services
@@ -326,11 +173,7 @@ docker-compose logs -f frontend
 
 ### 5. Set Up Backups
 
-**Database Backups (Digital Ocean):**
-- Automatic daily backups are included with managed databases
-- Configure retention period in database settings
-
-**Docker Compose:**
+**Docker Compose Database Backups:**
 ```bash
 # Backup database
 docker-compose exec db mysqldump -u admin_user -p admin_panel > backup.sql
@@ -359,20 +202,6 @@ Add to your repository settings:
 
 ## 🚀 Scaling
 
-### Digital Ocean
-
-1. **Horizontal Scaling:**
-   - Increase instance count in app spec
-   - Each service scales independently
-
-2. **Vertical Scaling:**
-   - Upgrade instance size in settings
-   - Options: basic-xxs, basic-xs, basic-s, etc.
-
-3. **Database Scaling:**
-   - Upgrade database plan as needed
-   - Add read replicas for read-heavy workloads
-
 ### Docker Compose
 
 ```bash
@@ -387,15 +216,6 @@ docker-compose up -d --scale backend=3 --scale frontend=2
 ## 🐛 Troubleshooting
 
 ### Common Issues
-
-**0. No Components Detected (Digital Ocean)**
-- ✅ **FIXED**: Root-level `package.json` and `composer.json` added for auto-detection
-- Verify you're connected to the correct repository
-- Ensure the `main` branch is selected
-- Check that `.do/app.yaml` exists in the repository
-- Try manually importing the app spec using "Edit App Spec" option
-- Verify GitHub permissions allow Digital Ocean to read the repository
-- If auto-detection still fails, use Option 2 (Manual Configuration) from deployment steps
 
 **1. Database Connection Failed**
 - Check database credentials
@@ -430,7 +250,6 @@ docker-compose up -d --scale backend=3 --scale frontend=2
 
 ## 📚 Additional Resources
 
-- [Digital Ocean App Platform Docs](https://docs.digitalocean.com/products/app-platform/)
 - [Docker Documentation](https://docs.docker.com/)
 - [Laravel Deployment](https://laravel.com/docs/deployment)
 - [Next.js Deployment](https://nextjs.org/docs/deployment)

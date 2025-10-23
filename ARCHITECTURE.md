@@ -6,7 +6,7 @@ This document describes the architecture and deployment structure of the Admin P
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
-│                        Digital Ocean                             │
+│                     Docker Deployment                            │
 │                                                                   │
 │  ┌─────────────────┐         ┌─────────────────┐                │
 │  │   Frontend      │         │    Backend      │                │
@@ -34,8 +34,6 @@ This document describes the architecture and deployment structure of the Admin P
 
 ```
 admin-panel-laravel-tailwincss-nextjs-mui/
-├── .do/
-│   └── app.yaml                 # Digital Ocean app specification
 ├── .github/
 │   └── workflows/
 │       └── docker-publish.yml   # CI/CD pipeline
@@ -134,11 +132,11 @@ JSON Response
 └─────────────────────────────────────────────────────────────────┘
 ```
 
-### Production Mode (Digital Ocean)
+### Production Mode (Docker with Load Balancer)
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
-│ Digital Ocean App Platform                                       │
+│ Production Environment with Load Balancer                        │
 │                                                                   │
 │  ┌─────────────┐                                                 │
 │  │   Load      │                                                 │
@@ -147,18 +145,18 @@ JSON Response
 │         │                                                         │
 │    ┌────┴────┐                                                   │
 │    ▼         ▼                                                   │
-│  ┌─────┐  ┌─────┐    Frontend Service (Auto-scaled)             │
+│  ┌─────┐  ┌─────┐    Frontend Service (Scaled)                  │
 │  │     │  │     │                                                │
 │  └─────┘  └─────┘                                                │
 │                                                                   │
-│  ┌─────────────┐    Backend Service (Auto-scaled)               │
+│  ┌─────────────┐    Backend Service (Scaled)                    │
 │  │   Backend   │                                                 │
 │  │  + Nginx    │                                                 │
 │  └──────┬──────┘                                                 │
 │         │                                                         │
 │         ▼                                                         │
-│  ┌─────────────┐    Managed Database                            │
-│  │   MySQL 8   │    (Automatic Backups)                         │
+│  ┌─────────────┐    Database                                     │
+│  │   MySQL 8   │    (With Backups)                               │
 │  └─────────────┘                                                 │
 │                                                                   │
 │  ┌─────────────┐    Worker (Optional)                           │
@@ -192,7 +190,7 @@ JSON Response
 - **Web Server**: Nginx
 - **CI/CD**: GitHub Actions
 - **Registry**: Docker Hub
-- **Platform**: Digital Ocean App Platform
+- **Deployment**: Docker Compose
 
 ## 🔐 Security Features
 
@@ -208,7 +206,7 @@ JSON Response
 - Health checks for all services
 - Private networking between containers
 - Environment variable management
-- SSL/TLS certificates (Digital Ocean)
+- SSL/TLS certificates (via reverse proxy)
 - Database connection pooling
 - Rate limiting (configurable)
 
@@ -239,27 +237,14 @@ docker-compose logs -f backend
 docker-compose logs -f frontend
 ```
 
-**Digital Ocean Logs**
-- Available in dashboard under each service
-- Real-time log streaming
-- Log retention per plan
-
 ## 🚀 Deployment Methods
 
-### 1. Digital Ocean App Platform (Recommended)
-- Managed infrastructure
-- Auto-scaling
-- Built-in SSL
-- Automatic backups
-- Zero-downtime deployments
-- $5-10/month per service
-
-### 2. Docker Compose (Self-Hosted)
+### Docker Compose
 - Full control
 - Cost-effective
-- Requires server management
-- Manual scaling
-- Custom SSL setup
+- Works on any Docker-compatible platform
+- Manual or automated scaling
+- Custom SSL setup via reverse proxy
 
 ### 3. Kubernetes (Advanced)
 - Maximum scalability
@@ -269,15 +254,14 @@ docker-compose logs -f frontend
 
 ## 📈 Scaling Strategy
 
-### Horizontal Scaling (Digital Ocean)
-```yaml
-# In .do/app.yaml
-instance_count: 3  # Run 3 instances
-instance_size_slug: basic-s  # Increase size
+### Horizontal Scaling (Docker Compose)
+```bash
+# Scale services using Docker Compose
+docker-compose up -d --scale backend=3 --scale frontend=2
 ```
 
 ### Vertical Scaling
-- Upgrade instance size
+- Upgrade container resources
 - Increase database resources
 - Add read replicas
 
@@ -308,27 +292,27 @@ Push to Docker Hub
 Tag with: latest, branch name
 ```
 
-### Digital Ocean Auto-Deploy
+### Docker Deployment Flow
 ```
 GitHub Push → main branch
     │
     ▼
-Digital Ocean Detects Change
+Pull Changes on Server
     │
     ▼
-Build New Images
+Build/Pull New Images
     │
     ▼
-Run Pre-Deploy Job (migrations)
+Run Migrations (automatic on backend startup)
     │
     ▼
-Deploy New Version
+Restart Services
     │
     ▼
 Health Check
     │
     ▼
-Live! (Zero Downtime)
+Live!
 ```
 
 ## 🛠️ Development Workflow
@@ -425,7 +409,7 @@ See [DEPLOYMENT.md](DEPLOYMENT.md) for detailed troubleshooting.
 - [README](README.md)
 - [Laravel Docs](https://laravel.com/docs)
 - [Next.js Docs](https://nextjs.org/docs)
-- [Digital Ocean Docs](https://docs.digitalocean.com/products/app-platform/)
+- [Docker Docs](https://docs.docker.com/)
 
 ---
 

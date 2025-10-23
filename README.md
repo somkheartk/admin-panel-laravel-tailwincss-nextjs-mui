@@ -5,7 +5,6 @@ A beautiful and modern admin panel built with Laravel backend and Next.js fronte
 ![Admin Panel](https://img.shields.io/badge/Stack-Laravel%20%2B%20Next.js-blue)
 ![Docker](https://img.shields.io/badge/Docker-Ready-green)
 ![CI/CD](https://img.shields.io/badge/CI%2FCD-GitHub%20Actions-orange)
-[![Deploy to DO](https://www.deploytodo.com/do-btn-blue.svg)](https://cloud.digitalocean.com/apps/new?repo=https://github.com/somkheartk/admin-panel-laravel-tailwincss-nextjs-mui/tree/main)
 
 ## 🚀 Features
 
@@ -13,7 +12,6 @@ A beautiful and modern admin panel built with Laravel backend and Next.js fronte
 - **Beautiful UI**: Material-UI components with Tailwind CSS styling
 - **Responsive Design**: Mobile-first approach with responsive sidebar
 - **Docker Support**: Full Docker containerization for easy deployment
-- **Digital Ocean Ready**: One-click deployment to Digital Ocean App Platform
 - **CI/CD Pipeline**: Automated Docker image builds and pushes to Docker Hub
 - **API Ready**: RESTful API endpoints with Laravel backend
 - **Production Ready**: Optimized for production with health checks and monitoring
@@ -22,48 +20,17 @@ A beautiful and modern admin panel built with Laravel backend and Next.js fronte
 
 This repository is configured as a template for easy project creation:
 
-### Option 1: GitHub Template
 1. Click the "Use this template" button at the top of the repository page
 2. Create your new repository
 3. Clone and customize for your needs
 
-### Option 2: DigitalOcean One-Click Deploy
-1. Click the "Deploy to DigitalOcean" button above
-2. Authorize DigitalOcean to access your GitHub account
-3. Select or fork this repository
-4. Configure your app name and settings
-5. If using the template spec (`.do/deploy.template.yaml`), update the `github.repo` fields with your repository path
-6. Add required secrets (especially `APP_KEY`)
-7. Deploy!
-
 The repository includes:
 - `.github/template.yml` - GitHub template configuration
-- `.do/deploy.template.yaml` - DigitalOcean deployment template (update repo paths when using)
-- `.do/app.yaml` - Complete app specification
+- Docker Compose configuration for easy deployment
 
 ## ⚡ Quick Start
 
-### 🌊 Deploy to Digital Ocean (Recommended)
-
-Deploy in minutes with Digital Ocean App Platform:
-
-1. Click the "Deploy to DigitalOcean" button above
-2. Select your GitHub repository: `somkheartk/admin-panel-laravel-tailwincss-nextjs-mui`
-3. Branch: `main`
-4. Digital Ocean will automatically detect components using the `.do/app.yaml` spec
-5. Optionally add your `APP_KEY` secret (will be auto-generated if not provided)
-6. Click "Deploy"
-
-**What happens during deployment:**
-- Two components are deployed: Backend (Laravel) and Frontend (Next.js)
-- Database (MySQL 8) is automatically provisioned
-- Backend automatically generates APP_KEY if not provided
-- Migrations run automatically when backend container starts
-- No manual intervention needed - the app is ready to use immediately!
-
-For detailed instructions, see [DEPLOYMENT.md](DEPLOYMENT.md).
-
-### 🐳 Docker Quick Start
+### 🐳 Docker Quick Start (Recommended)
 
 Want to run locally? Check out our [Quick Start Guide](QUICKSTART.md)!
 
@@ -135,25 +102,6 @@ docker compose up -d
 - Generates APP_KEY if not provided
 - Runs database migrations on startup
 - No manual migration step needed!
-
-### Digital Ocean Deployment
-
-Deploy the entire stack on Digital Ocean App Platform with a single click!
-
-1. **Prerequisites:**
-   - Digital Ocean account
-   - GitHub repository connected
-
-2. **Deploy Steps:**
-   - Use the app spec at `.do/app.yaml`
-   - Or follow detailed instructions in [DEPLOYMENT.md](DEPLOYMENT.md)
-
-3. **Features:**
-   - ✅ Automatic deployments from `main` branch
-   - ✅ Managed MySQL database
-   - ✅ Auto-scaling capabilities
-   - ✅ Built-in SSL/TLS certificates
-   - ✅ Health checks and monitoring
 
 See [DEPLOYMENT.md](DEPLOYMENT.md) for complete deployment guide.
 

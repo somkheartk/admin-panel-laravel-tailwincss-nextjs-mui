@@ -2,48 +2,7 @@
 
 Get your Admin Panel up and running in minutes!
 
-## 🚀 Option 1: Deploy to Digital Ocean (Recommended)
-
-### Prerequisites
-- Digital Ocean account
-- GitHub repository access
-
-### Steps
-
-1. **Login to Digital Ocean**
-   - Go to [Digital Ocean App Platform](https://cloud.digitalocean.com/apps)
-   - Click "Create App"
-
-2. **Connect Repository**
-   - Select GitHub as source
-   - Authorize Digital Ocean
-   - Choose: `somkheartk/admin-panel-laravel-tailwincss-nextjs-mui`
-   - Branch: `main`
-
-3. **Import Configuration**
-   - Click "Edit App Spec"
-   - Copy contents from `.do/app.yaml`
-   - Paste and save
-
-4. **Add Secrets**
-   - Generate APP_KEY:
-     ```bash
-     # Locally with PHP:
-     cd backend
-     php artisan key:generate --show
-     ```
-   - Add as secret: `APP_KEY`
-
-5. **Deploy!**
-   - Click "Create Resources"
-   - Wait 5-10 minutes
-   - Your app is live! 🎉
-
-**Cost**: Starting from $5/month per service
-
----
-
-## 🐳 Option 2: Docker Compose (Local/Self-Hosted)
+## 🐳 Docker Compose Deployment
 
 ### Prerequisites
 - Docker Engine 20.10+
@@ -153,7 +112,6 @@ After deployment:
    ```
 
 4. **Monitor Services**
-   - Digital Ocean: Dashboard → Apps → Your App
    - Docker: `./deploy.sh status` or `docker-compose ps`
 
 ---
@@ -165,6 +123,10 @@ After deployment:
 **Services won't start?**
 - Check: `docker-compose logs`
 - Verify: `.env` file exists with `APP_KEY`
+
+**Can't connect to database?**
+- Wait 30s for MySQL to initialize
+- Check: `docker-compose exec db mysql -u admin_user -p`
 
 **Can't connect to database?**
 - Wait 30s for MySQL to initialize

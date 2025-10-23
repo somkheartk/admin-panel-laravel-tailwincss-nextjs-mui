@@ -15,6 +15,9 @@ spec:
     - name: backend
       dockerfile_path: backend/Dockerfile
       source_dir: backend
+      github:
+        branch: main
+        deploy_on_push: true
       instance_count: 1
       instance_size_slug: basic-xxs
       http_port: 80
@@ -58,6 +61,9 @@ spec:
     - name: frontend
       dockerfile_path: frontend/Dockerfile
       source_dir: frontend
+      github:
+        branch: main
+        deploy_on_push: true
       instance_count: 1
       instance_size_slug: basic-xxs
       http_port: 3000
@@ -74,6 +80,9 @@ spec:
     - name: queue-worker
       dockerfile_path: backend/Dockerfile
       source_dir: backend
+      github:
+        branch: main
+        deploy_on_push: true
       instance_count: 1
       instance_size_slug: basic-xxs
       run_command: php artisan queue:work --tries=3
@@ -106,6 +115,9 @@ spec:
       kind: PRE_DEPLOY
       dockerfile_path: backend/Dockerfile
       source_dir: backend
+      github:
+        branch: main
+        deploy_on_push: true
       run_command: php artisan migrate --force
       envs:
         - key: APP_NAME

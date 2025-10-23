@@ -65,7 +65,8 @@ Digital Ocean will:
 
 3. **Import App Spec**
    - Select "Edit App Spec"
-   - Copy the contents of `.do/app.yaml`
+   - Copy the contents of `.do/app.yaml` (or `.do/deploy.template.yaml` if using as a template)
+   - If using the template, replace `somkheartk/admin-panel-laravel-tailwincss-nextjs-mui` with your repository path
    - Paste into the spec editor
    - Click "Next"
 

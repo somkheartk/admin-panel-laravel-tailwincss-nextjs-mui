@@ -1,7 +1,10 @@
 spec:
   name: admin-panel-laravel-nextjs
   region: nyc
-  
+
+  # NOTE: When using this template, replace 'somkheartk/admin-panel-laravel-tailwincss-nextjs-mui'
+  # with your own GitHub repository path (e.g., 'yourusername/your-repo-name')
+
   # Database
   databases:
     - name: db
@@ -9,13 +12,14 @@ spec:
       version: "8"
       production: true
       cluster_name: admin-panel-db
-  
+
   # Backend Service (Laravel API)
   services:
     - name: backend
       dockerfile_path: backend/Dockerfile
       source_dir: backend
       github:
+        repo: somkheartk/admin-panel-laravel-tailwincss-nextjs-mui
         branch: main
         deploy_on_push: true
       instance_count: 1
@@ -56,12 +60,13 @@ spec:
           value: database
         - key: CACHE_STORE
           value: database
-  
+
     # Frontend Service (Next.js)
     - name: frontend
       dockerfile_path: frontend/Dockerfile
       source_dir: frontend
       github:
+        repo: somkheartk/admin-panel-laravel-tailwincss-nextjs-mui
         branch: main
         deploy_on_push: true
       instance_count: 1
@@ -74,13 +79,14 @@ spec:
           value: production
         - key: NEXT_PUBLIC_API_URL
           value: ${backend.PUBLIC_URL}/api
-  
+
   # Workers (Optional - for queue processing)
   workers:
     - name: queue-worker
       dockerfile_path: backend/Dockerfile
       source_dir: backend
       github:
+        repo: somkheartk/admin-panel-laravel-tailwincss-nextjs-mui
         branch: main
         deploy_on_push: true
       instance_count: 1
@@ -108,7 +114,7 @@ spec:
         - key: DB_PASSWORD
           scope: RUN_TIME
           value: ${db.PASSWORD}
-  
+
   # Jobs for migrations
   jobs:
     - name: migrate
@@ -116,6 +122,7 @@ spec:
       dockerfile_path: backend/Dockerfile
       source_dir: backend
       github:
+        repo: somkheartk/admin-panel-laravel-tailwincss-nextjs-mui
         branch: main
         deploy_on_push: true
       run_command: php artisan migrate --force

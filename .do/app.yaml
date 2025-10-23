@@ -14,6 +14,7 @@ services:
   - name: backend
     dockerfile_path: backend/Dockerfile
     source_dir: backend
+    build_command: composer install --optimize-autoloader --no-dev
     github:
       repo: somkheartk/admin-panel-laravel-tailwincss-nextjs-mui
       branch: main
@@ -61,6 +62,7 @@ services:
   - name: frontend
     dockerfile_path: frontend/Dockerfile
     source_dir: frontend
+    build_command: npm ci && npm run build
     github:
       repo: somkheartk/admin-panel-laravel-tailwincss-nextjs-mui
       branch: main

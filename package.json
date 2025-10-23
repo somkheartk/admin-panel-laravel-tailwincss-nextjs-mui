@@ -1,0 +1,49 @@
+{
+  "name": "admin-panel-laravel-nextjs",
+  "version": "1.0.0",
+  "description": "Admin Panel with Laravel backend and Next.js frontend - A modern admin dashboard built with Laravel, Next.js, Tailwind CSS, and Material-UI",
+  "private": true,
+  "workspaces": [
+    "frontend",
+    "backend"
+  ],
+  "scripts": {
+    "install:frontend": "cd frontend && npm install",
+    "install:backend": "cd backend && npm install",
+    "install:all": "npm run install:frontend && npm run install:backend",
+    "dev:frontend": "cd frontend && npm run dev",
+    "dev:backend": "cd backend && npm run dev",
+    "build:frontend": "cd frontend && npm run build",
+    "build:backend": "cd backend && npm run build",
+    "start:frontend": "cd frontend && npm run start",
+    "lint:frontend": "cd frontend && npm run lint",
+    "docker:up": "docker-compose up -d",
+    "docker:down": "docker-compose down",
+    "docker:build": "docker-compose build",
+    "docker:logs": "docker-compose logs -f"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/somkheartk/admin-panel-laravel-tailwincss-nextjs-mui.git"
+  },
+  "keywords": [
+    "admin-panel",
+    "laravel",
+    "nextjs",
+    "tailwindcss",
+    "material-ui",
+    "typescript",
+    "docker",
+    "digitalocean"
+  ],
+  "author": "somkheartk",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/somkheartk/admin-panel-laravel-tailwincss-nextjs-mui/issues"
+  },
+  "homepage": "https://github.com/somkheartk/admin-panel-laravel-tailwincss-nextjs-mui#readme",
+  "engines": {
+    "node": ">=20.0.0",
+    "npm": ">=10.0.0"
+  }
+}

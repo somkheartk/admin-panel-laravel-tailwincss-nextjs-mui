@@ -5,6 +5,7 @@ This directory contains the configuration for deploying to Digital Ocean App Pla
 ## Files
 
 - **app.yaml**: The complete app specification that defines all components (backend, frontend, database, workers, and jobs)
+- **deploy.template.yaml**: Template specification for one-click deployment from Git template (without hardcoded repository references)
 
 ## How to Deploy
 

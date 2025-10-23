@@ -18,6 +18,28 @@ A beautiful and modern admin panel built with Laravel backend and Next.js fronte
 - **API Ready**: RESTful API endpoints with Laravel backend
 - **Production Ready**: Optimized for production with health checks and monitoring
 
+## 📋 Use as Template
+
+This repository is configured as a template for easy project creation:
+
+### Option 1: GitHub Template
+1. Click the "Use this template" button at the top of the repository page
+2. Create your new repository
+3. Clone and customize for your needs
+
+### Option 2: DigitalOcean One-Click Deploy
+1. Click the "Deploy to DigitalOcean" button above
+2. Authorize DigitalOcean to access your GitHub account
+3. Select or fork this repository
+4. Configure your app name and settings
+5. Add required secrets (especially `APP_KEY`)
+6. Deploy!
+
+The repository includes:
+- `.github/template.yml` - GitHub template configuration
+- `.do/deploy.template.yaml` - DigitalOcean deployment template
+- `.do/app.yaml` - Complete app specification
+
 ## ⚡ Quick Start
 
 ### 🌊 Deploy to Digital Ocean (Recommended)

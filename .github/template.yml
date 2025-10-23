@@ -1,0 +1,23 @@
+# GitHub Template Configuration
+# This file configures the repository as a template for creating new repositories
+
+# Template metadata
+name: Admin Panel - Laravel + Next.js + Tailwind CSS + MUI
+description: A beautiful and modern admin panel built with Laravel backend and Next.js frontend, featuring Material-UI components and Tailwind CSS styling.
+
+# Files to exclude when using this template
+# These files are specific to this repository and should not be copied
+exclude:
+  - .github/workflows/docker-publish.yml  # CI/CD workflow - users should configure their own
+  - CHANGES.md                             # Changelog specific to this repo
+  - CHANGES_SUMMARY.md                     # Summary specific to this repo
+  - .git/                                  # Git history
+  - .github/template.yml                   # This template config itself
+
+# Files to include (optional - by default all files are included except those in exclude)
+# Uncomment and customize if you want to explicitly list files to include
+# include:
+#   - backend/
+#   - frontend/
+#   - README.md
+#   - docker-compose.yml

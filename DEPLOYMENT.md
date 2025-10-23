@@ -136,10 +136,13 @@ Digital Ocean will:
      NEXT_PUBLIC_API_URL=${backend.PUBLIC_URL}/api
      ```
 
-4. **Run Migrations Manually (After Deployment)**
-   - After deployment, access the backend console
-   - Run: `php artisan migrate --force`
-   - Or use Digital Ocean's console feature to execute migrations
+4. **Add Pre-Deploy Job (Migrations)**
+   - Name: `migrate`
+   - Type: Pre-Deploy Job
+   - Source Directory: `backend`
+   - Command: `php artisan migrate --force`
+   - **Important:** Include APP_KEY secret in environment variables
+   - Use same environment variables as backend (APP_NAME, APP_ENV, APP_KEY, DB_* variables)
 
 ### Auto-Deploy Configuration
 

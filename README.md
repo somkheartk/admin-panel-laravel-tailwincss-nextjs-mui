@@ -52,15 +52,47 @@ git clone https://github.com/somkheartk/admin-panel-laravel-tailwincss-nextjs-mu
 cd admin-panel-laravel-tailwincss-nextjs-mui
 ```
 
-2. Start all services:
+2. Configure environment:
+```bash
+cp .env.docker.example .env
+# Edit .env and add your APP_KEY (generate with: php artisan key:generate --show)
+```
+
+3. Start all services:
 ```bash
 docker-compose up -d
 ```
 
-3. Access the applications:
+4. Run database migrations:
+```bash
+docker-compose exec backend php artisan migrate --force
+```
+
+5. Access the applications:
 - Frontend: http://localhost:3000
 - Backend API: http://localhost:8000
 - Database: localhost:3306
+
+### Digital Ocean Deployment
+
+Deploy the entire stack on Digital Ocean App Platform with a single click!
+
+1. **Prerequisites:**
+   - Digital Ocean account
+   - GitHub repository connected
+
+2. **Deploy Steps:**
+   - Use the app spec at `.do/app.yaml`
+   - Or follow detailed instructions in [DEPLOYMENT.md](DEPLOYMENT.md)
+
+3. **Features:**
+   - ✅ Automatic deployments from `main` branch
+   - ✅ Managed MySQL database
+   - ✅ Auto-scaling capabilities
+   - ✅ Built-in SSL/TLS certificates
+   - ✅ Health checks and monitoring
+
+See [DEPLOYMENT.md](DEPLOYMENT.md) for complete deployment guide.
 
 ### Individual Docker Builds
 
@@ -68,7 +100,7 @@ Build and run Backend:
 ```bash
 cd backend
 docker build -t admin-panel-backend .
-docker run -p 8000:9000 admin-panel-backend
+docker run -p 8000:80 admin-panel-backend
 ```
 
 Build and run Frontend:

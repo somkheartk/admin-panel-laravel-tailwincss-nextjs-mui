@@ -24,6 +24,11 @@ This guide explains how to deploy the Admin Panel application on Digital Ocean o
 
 This repository is configured to be automatically detected by Digital Ocean App Platform:
 
+**Deployment Components:**
+- 🗄️ **Database**: MySQL 8.0 managed database
+- 🔧 **Backend**: Laravel API service (PHP 8.3)
+- 🎨 **Frontend**: Next.js web application (Node.js)
+
 **Detection Files:**
 - ✅ Root-level `package.json` - For Node.js/Next.js detection
 - ✅ Root-level `composer.json` - For PHP/Laravel detection
@@ -35,7 +40,9 @@ When you connect this repository to Digital Ocean:
 1. The platform will detect both package.json and composer.json
 2. It will automatically use the `.do/app.yaml` specification
 3. Components will be configured with proper source directories
-4. All services (backend, frontend, database, workers) will be set up automatically
+4. Two main services (backend and frontend) plus the database will be set up automatically
+
+**Note:** This deployment uses a simplified 2-component architecture (backend + frontend) without workers or pre-deploy jobs. Database migrations should be run manually after deployment.
 
 ### Deployment Steps
 
@@ -48,7 +55,8 @@ Click the deploy button in the main README or use this link:
 Digital Ocean will:
 - Automatically detect the repository components
 - Import the `.do/app.yaml` specification
-- Configure all services with correct settings
+- Configure backend and frontend services with correct settings
+- Set up the MySQL database
 - You only need to add the `APP_KEY` secret
 
 #### Option 2: Using App Spec (Recommended)
@@ -128,12 +136,10 @@ Digital Ocean will:
      NEXT_PUBLIC_API_URL=${backend.PUBLIC_URL}/api
      ```
 
-4. **Add Pre-Deploy Job (Migrations)**
-   - Name: `migrate`
-   - Type: Pre-Deploy Job
-   - Source Directory: `backend`
-   - Command: `php artisan migrate --force`
-   - Use same environment variables as backend
+4. **Run Migrations Manually (After Deployment)**
+   - After deployment, access the backend console
+   - Run: `php artisan migrate --force`
+   - Or use Digital Ocean's console feature to execute migrations
 
 ### Auto-Deploy Configuration
 
@@ -272,8 +278,11 @@ curl https://your-frontend-url
 ### 2. Run Database Migrations
 
 **Digital Ocean:**
-- Migrations run automatically via pre-deploy job
-- Check job logs in Digital Ocean dashboard
+- Since there's no pre-deploy job, migrations must be run manually
+- Access your backend service console in Digital Ocean dashboard
+- Navigate to Console tab for the backend service
+- Run: `php artisan migrate --force`
+- Check the output to verify migrations completed successfully
 
 **Docker Compose:**
 ```bash

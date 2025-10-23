@@ -133,7 +133,8 @@ Digital Ocean will:
    - Type: Pre-Deploy Job
    - Source Directory: `backend`
    - Command: `php artisan migrate --force`
-   - Use same environment variables as backend
+   - **Important:** Include APP_KEY secret in environment variables
+   - Use same environment variables as backend (APP_NAME, APP_ENV, APP_KEY, DB_* variables)
 
 ### Auto-Deploy Configuration
 

@@ -131,6 +131,9 @@ spec:
           value: AdminPanel
         - key: APP_ENV
           value: production
+        - key: APP_KEY
+          scope: RUN_AND_BUILD_TIME
+          type: SECRET
         - key: DB_CONNECTION
           value: mysql
         - key: DB_HOST

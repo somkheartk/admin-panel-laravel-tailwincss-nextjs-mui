@@ -20,7 +20,7 @@ services:
       deploy_on_push: true
     instance_count: 1
     instance_size_slug: basic-xxs
-    http_port: 9000
+    http_port: 80
     routes:
       - path: /api
     envs:
@@ -127,6 +127,9 @@ jobs:
         value: AdminPanel
       - key: APP_ENV
         value: production
+      - key: APP_KEY
+        scope: RUN_AND_BUILD_TIME
+        type: SECRET
       - key: DB_CONNECTION
         value: mysql
       - key: DB_HOST

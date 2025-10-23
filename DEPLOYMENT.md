@@ -26,7 +26,7 @@ This repository is configured to be automatically detected by Digital Ocean App 
 
 **Deployment Components:**
 - 🗄️ **Database**: MySQL 8.0 managed database
-- 🔧 **Backend**: Laravel API service (PHP 8.3)
+- 🔧 **Backend**: Laravel API service (PHP 8.3) - includes automatic migrations on startup
 - 🎨 **Frontend**: Next.js web application (Node.js)
 
 **Detection Files:**
@@ -41,8 +41,12 @@ When you connect this repository to Digital Ocean:
 2. It will automatically use the `.do/app.yaml` specification
 3. Components will be configured with proper source directories
 4. Two main services (backend and frontend) plus the database will be set up automatically
+5. Backend automatically generates APP_KEY if not provided and runs migrations on startup
 
-**Note:** This deployment uses a simplified 2-component architecture (backend + frontend) without workers or pre-deploy jobs. Database migrations should be run manually after deployment.
+**Note:** This deployment uses a simplified 2-component architecture (backend + frontend). The backend container automatically:
+- Generates APP_KEY if not provided (though it's recommended to set it as a secret)
+- Runs database migrations on container startup
+- No separate worker or pre-deploy jobs needed
 
 ### Deployment Steps
 
@@ -79,13 +83,14 @@ Digital Ocean will:
    - Click "Next"
 
 4. **Configure Environment Variables**
-   - Add `APP_KEY` secret:
+   - Optionally add `APP_KEY` secret (if not provided, one will be auto-generated on first deployment):
      ```bash
      # Generate locally:
      php artisan key:generate --show
      ```
    - Copy the generated key (e.g., `base64:...`)
    - Add as a secret in Digital Ocean
+   - **Note**: While APP_KEY will be auto-generated if not provided, it's recommended to set it as a secret for production use to ensure consistency across deployments
 
 5. **Review & Deploy**
    - Review the configuration
@@ -136,13 +141,7 @@ Digital Ocean will:
      NEXT_PUBLIC_API_URL=${backend.PUBLIC_URL}/api
      ```
 
-4. **Add Pre-Deploy Job (Migrations)**
-   - Name: `migrate`
-   - Type: Pre-Deploy Job
-   - Source Directory: `backend`
-   - Command: `php artisan migrate --force`
-   - **Important:** Include APP_KEY secret in environment variables
-   - Use same environment variables as backend (APP_NAME, APP_ENV, APP_KEY, DB_* variables)
+**Note**: With the simplified 2-component setup, migrations run automatically when the backend container starts. No separate migration job needed!
 
 ### Auto-Deploy Configuration
 
@@ -281,11 +280,13 @@ curl https://your-frontend-url
 ### 2. Run Database Migrations
 
 **Digital Ocean:**
-- Since there's no pre-deploy job, migrations must be run manually
-- Access your backend service console in Digital Ocean dashboard
-- Navigate to Console tab for the backend service
-- Run: `php artisan migrate --force`
-- Check the output to verify migrations completed successfully
+- Migrations run automatically when the backend container starts
+- No manual intervention needed!
+- Check backend service logs to verify migrations completed successfully:
+  - Navigate to your app in Digital Ocean dashboard
+  - Select the backend service
+  - View Runtime Logs
+  - Look for "Running database migrations..." message
 
 **Docker Compose:**
 ```bash
@@ -408,8 +409,9 @@ docker-compose up -d --scale backend=3 --scale frontend=2
 
 **3. 500 Internal Server Error**
 - Check backend logs
-- Verify `APP_KEY` is set
-- Run `php artisan config:cache`
+- Verify `APP_KEY` is set (or allow auto-generation)
+- Check database connection
+- Review startup logs for migration errors
 
 **4. Build Failures**
 - Check Dockerfile syntax

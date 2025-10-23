@@ -147,7 +147,11 @@ The project includes a GitHub Actions workflow that automatically:
 Add these secrets to your GitHub repository:
 
 - `DOCKER_USERNAME`: Your Docker Hub username
-- `DOCKER_PASSWORD`: Your Docker Hub password or access token
+- `DOCKER_TOKEN`: Your Docker Hub Personal Access Token (PAT) with **Read & Write** permissions
+  - Create a token at: https://hub.docker.com/settings/security
+  - Select permissions: `Read, Write, Delete` (or at minimum `Read, Write`)
+  - **Note**: Do NOT use your Docker Hub password. You must use a Personal Access Token.
+  - Alternative: You can also use `DOCKER_PASSWORD` secret name for backward compatibility
 
 ## 🎨 Tech Stack
 

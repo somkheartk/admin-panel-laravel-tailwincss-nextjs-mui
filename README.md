@@ -51,8 +51,15 @@ Deploy in minutes with Digital Ocean App Platform:
 2. Select your GitHub repository: `somkheartk/admin-panel-laravel-tailwincss-nextjs-mui`
 3. Branch: `main`
 4. Digital Ocean will automatically detect components using the `.do/app.yaml` spec
-5. Add your `APP_KEY` secret (generate with: `php artisan key:generate --show`)
+5. Optionally add your `APP_KEY` secret (will be auto-generated if not provided)
 6. Click "Deploy"
+
+**What happens during deployment:**
+- Two components are deployed: Backend (Laravel) and Frontend (Next.js)
+- Database (MySQL 8) is automatically provisioned
+- Backend automatically generates APP_KEY if not provided
+- Migrations run automatically when backend container starts
+- No manual intervention needed - the app is ready to use immediately!
 
 For detailed instructions, see [DEPLOYMENT.md](DEPLOYMENT.md).
 
@@ -65,8 +72,9 @@ Want to run locally? Check out our [Quick Start Guide](QUICKSTART.md)!
 git clone https://github.com/somkheartk/admin-panel-laravel-tailwincss-nextjs-mui.git
 cd admin-panel-laravel-tailwincss-nextjs-mui
 cp .env.docker.example .env
-# Add APP_KEY to .env
-./deploy.sh up && ./deploy.sh migrate
+# APP_KEY will be auto-generated if not set
+./deploy.sh up
+# Migrations run automatically on backend startup!
 ```
 
 ## 📋 Prerequisites
@@ -109,23 +117,24 @@ cd admin-panel-laravel-tailwincss-nextjs-mui
 2. Configure environment:
 ```bash
 cp .env.docker.example .env
-# Edit .env and add your APP_KEY (generate with: php artisan key:generate --show)
+# Optionally edit .env and add your APP_KEY
+# If not provided, APP_KEY will be auto-generated on first startup
 ```
 
 3. Start all services:
 ```bash
-docker-compose up -d
+docker compose up -d
 ```
 
-4. Run database migrations:
-```bash
-docker-compose exec backend php artisan migrate --force
-```
-
-5. Access the applications:
+4. Access the applications (migrations run automatically):
 - Frontend: http://localhost:3000
 - Backend API: http://localhost:8000
 - Database: localhost:3306
+
+**Note:** The backend container automatically:
+- Generates APP_KEY if not provided
+- Runs database migrations on startup
+- No manual migration step needed!
 
 ### Digital Ocean Deployment
 

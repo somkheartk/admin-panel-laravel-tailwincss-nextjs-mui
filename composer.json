@@ -1,0 +1,47 @@
+{
+    "name": "somkheartk/admin-panel-laravel-nextjs",
+    "description": "Admin Panel with Laravel backend and Next.js frontend - A modern admin dashboard built with Laravel, Next.js, Tailwind CSS, and Material-UI",
+    "type": "project",
+    "keywords": [
+        "admin-panel",
+        "laravel",
+        "nextjs",
+        "tailwindcss",
+        "material-ui",
+        "typescript",
+        "docker",
+        "digitalocean"
+    ],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "somkheartk",
+            "homepage": "https://github.com/somkheartk"
+        }
+    ],
+    "require": {
+        "php": "^8.3"
+    },
+    "scripts": {
+        "install-backend": "cd backend && composer install",
+        "install-frontend": "cd frontend && npm install",
+        "install-all": [
+            "@install-backend",
+            "@install-frontend"
+        ],
+        "dev-backend": "cd backend && php artisan serve",
+        "dev-frontend": "cd frontend && npm run dev",
+        "build-backend": "cd backend && composer install --optimize-autoloader --no-dev",
+        "build-frontend": "cd frontend && npm run build",
+        "docker-up": "./deploy.sh up",
+        "docker-down": "./deploy.sh down",
+        "docker-migrate": "./deploy.sh migrate"
+    },
+    "config": {
+        "optimize-autoloader": true,
+        "preferred-install": "dist",
+        "sort-packages": true
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
+}

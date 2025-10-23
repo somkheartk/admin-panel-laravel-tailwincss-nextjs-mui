@@ -37,6 +37,7 @@ frontend/out/
 frontend/build
 frontend/dist
 frontend/node_modules/
+frontend/.env.local
 frontend/.env*.local
 
 # Docker

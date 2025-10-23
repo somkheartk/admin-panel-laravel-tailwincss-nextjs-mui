@@ -1,10 +1,10 @@
 spec:
   name: admin-panel-laravel-nextjs
   region: nyc
-  
+
   # NOTE: When using this template, replace 'somkheartk/admin-panel-laravel-tailwincss-nextjs-mui'
   # with your own GitHub repository path (e.g., 'yourusername/your-repo-name')
-  
+
   # Database
   databases:
     - name: db
@@ -12,7 +12,7 @@ spec:
       version: "8"
       production: true
       cluster_name: admin-panel-db
-  
+
   # Backend Service (Laravel API)
   services:
     - name: backend
@@ -60,7 +60,7 @@ spec:
           value: database
         - key: CACHE_STORE
           value: database
-  
+
     # Frontend Service (Next.js)
     - name: frontend
       dockerfile_path: frontend/Dockerfile
@@ -79,7 +79,7 @@ spec:
           value: production
         - key: NEXT_PUBLIC_API_URL
           value: ${backend.PUBLIC_URL}/api
-  
+
   # Workers (Optional - for queue processing)
   workers:
     - name: queue-worker
@@ -114,7 +114,7 @@ spec:
         - key: DB_PASSWORD
           scope: RUN_TIME
           value: ${db.PASSWORD}
-  
+
   # Jobs for migrations
   jobs:
     - name: migrate

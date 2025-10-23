@@ -32,12 +32,13 @@ This repository is configured as a template for easy project creation:
 2. Authorize DigitalOcean to access your GitHub account
 3. Select or fork this repository
 4. Configure your app name and settings
-5. Add required secrets (especially `APP_KEY`)
-6. Deploy!
+5. If using the template spec (`.do/deploy.template.yaml`), update the `github.repo` fields with your repository path
+6. Add required secrets (especially `APP_KEY`)
+7. Deploy!
 
 The repository includes:
 - `.github/template.yml` - GitHub template configuration
-- `.do/deploy.template.yaml` - DigitalOcean deployment template
+- `.do/deploy.template.yaml` - DigitalOcean deployment template (update repo paths when using)
 - `.do/app.yaml` - Complete app specification
 
 ## ⚡ Quick Start

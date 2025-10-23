@@ -2,6 +2,9 @@ spec:
   name: admin-panel-laravel-nextjs
   region: nyc
   
+  # NOTE: When using this template, replace 'somkheartk/admin-panel-laravel-tailwincss-nextjs-mui'
+  # with your own GitHub repository path (e.g., 'yourusername/your-repo-name')
+  
   # Database
   databases:
     - name: db
@@ -16,6 +19,7 @@ spec:
       dockerfile_path: backend/Dockerfile
       source_dir: backend
       github:
+        repo: somkheartk/admin-panel-laravel-tailwincss-nextjs-mui
         branch: main
         deploy_on_push: true
       instance_count: 1
@@ -62,6 +66,7 @@ spec:
       dockerfile_path: frontend/Dockerfile
       source_dir: frontend
       github:
+        repo: somkheartk/admin-panel-laravel-tailwincss-nextjs-mui
         branch: main
         deploy_on_push: true
       instance_count: 1
@@ -81,6 +86,7 @@ spec:
       dockerfile_path: backend/Dockerfile
       source_dir: backend
       github:
+        repo: somkheartk/admin-panel-laravel-tailwincss-nextjs-mui
         branch: main
         deploy_on_push: true
       instance_count: 1
@@ -116,6 +122,7 @@ spec:
       dockerfile_path: backend/Dockerfile
       source_dir: backend
       github:
+        repo: somkheartk/admin-panel-laravel-tailwincss-nextjs-mui
         branch: main
         deploy_on_push: true
       run_command: php artisan migrate --force

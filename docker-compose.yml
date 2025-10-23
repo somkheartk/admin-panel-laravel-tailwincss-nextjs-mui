@@ -1,29 +1,28 @@
 version: '3.8'
 
 services:
-  # MySQL Database
+  # MongoDB Database
   db:
-    image: mysql:8.0
+    image: mongo:8.0
     container_name: admin-panel-db
     restart: unless-stopped
     environment:
-      MYSQL_DATABASE: ${DB_DATABASE:-admin_panel}
-      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:-root_password}
-      MYSQL_USER: ${DB_USERNAME:-admin_user}
-      MYSQL_PASSWORD: ${DB_PASSWORD:-admin_password}
+      MONGO_INITDB_ROOT_USERNAME: ${MONGODB_USERNAME:-admin}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGODB_PASSWORD:-admin_password}
+      MONGO_INITDB_DATABASE: ${MONGODB_DATABASE:-admin_panel}
     ports:
-      - "${DB_PORT:-3306}:3306"
+      - "${MONGODB_PORT:-27017}:27017"
     volumes:
-      - db_data:/var/lib/mysql
+      - db_data:/data/db
     networks:
       - admin-panel-network
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
       interval: 10s
       timeout: 5s
       retries: 5
 
-  # Laravel Backend with Nginx
+  # NestJS Backend
   backend:
     build:
       context: ./backend
@@ -31,29 +30,19 @@ services:
     container_name: admin-panel-backend
     restart: unless-stopped
     ports:
-      - "${BACKEND_PORT:-8000}:80"
+      - "${BACKEND_PORT:-3001}:3001"
     environment:
-      APP_NAME: ${APP_NAME:-AdminPanel}
-      APP_ENV: ${APP_ENV:-production}
-      APP_KEY: ${APP_KEY}
-      APP_DEBUG: ${APP_DEBUG:-false}
-      APP_URL: ${APP_URL:-http://localhost:8000}
-      DB_CONNECTION: mysql
-      DB_HOST: db
-      DB_PORT: 3306
-      DB_DATABASE: ${DB_DATABASE:-admin_panel}
-      DB_USERNAME: ${DB_USERNAME:-admin_user}
-      DB_PASSWORD: ${DB_PASSWORD:-admin_password}
-      LOG_CHANNEL: ${LOG_CHANNEL:-stderr}
-      SESSION_DRIVER: ${SESSION_DRIVER:-database}
-      CACHE_STORE: ${CACHE_STORE:-database}
+      NODE_ENV: ${NODE_ENV:-production}
+      PORT: 3001
+      MONGODB_URI: mongodb://${MONGODB_USERNAME:-admin}:${MONGODB_PASSWORD:-admin_password}@db:27017/${MONGODB_DATABASE:-admin_panel}?authSource=admin
+      FRONTEND_URL: ${FRONTEND_URL:-http://localhost:3000}
     depends_on:
       db:
         condition: service_healthy
     networks:
       - admin-panel-network
     healthcheck:
-      test: ["CMD-SHELL", "curl -f http://localhost/api/health || exit 1"]
+      test: ["CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost:3001/api/health || exit 1"]
       interval: 30s
       timeout: 10s
       retries: 3
@@ -70,7 +59,7 @@ services:
       - "${FRONTEND_PORT:-3000}:3000"
     environment:
       NODE_ENV: ${NODE_ENV:-production}
-      NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-http://localhost:8000/api}
+      NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-http://localhost:3001/api}
     depends_on:
       - backend
     networks:
